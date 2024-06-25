@@ -15,6 +15,7 @@
 #### Example Usage:
 
 python3 project.py -u https://test.com --slow -o test.txt
+<br>
 python3 project.py -f path/to/somecode.js -v
 
 #### Description:
