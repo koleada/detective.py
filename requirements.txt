@@ -1,0 +1,8 @@
+colorama
+re
+argparse
+requests
+jsbeautifier
+bs4
+tomli
+warnings
