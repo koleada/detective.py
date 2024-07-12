@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore", category=GuessedAtParserWarning)
 
 regex = {
     "Cloudinary": "cloudinary://.*",
-    "db_query": r"(select|delete|update|connect\(|sql|mysql|postgresql|sqlites)",
+    "db_query": r"(\Uselect|\Udelete|\Uupdate|connect\(|sql|mysql|postgresql|sqlite)",
     "Firebase URL": ".*firebaseio\.com",
     "Slack Token": "(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})",
     "RSA private key": "-----BEGIN RSA PRIVATE KEY-----",
@@ -23,22 +23,32 @@ regex = {
     "Amazon AWS Access Key ID": r"AKIA[0-9A-Z]{16}",
     "Amazon MWS Auth Token": r"amzn\\.mws\\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
     "AWS API Key": r"AKIA[0-9A-Z]{16}",
+    "AWS Secret Key": r"[0-9a-zA-Z/+]{40}",
+    "Amazon Marketing Services": r"amzn.mws.[0-9a-f]{8}-[0-9a-f]{4}-10-9a-f1{4}-[0-9a,]{4}-[0-9a-f]{12}"
     "amazon_aws_url2": r"("
     r"[a-zA-Z0-9-\.\_]+\.s3\.amazonaws\.com"
     r"|s3://[a-zA-Z0-9-\.\_]+"
     r"|s3-[a-zA-Z0-9-\.\_\/]+"
     r"|s3.amazonaws.com/[a-zA-Z0-9-\.\_]+"
     r"|s3.console.aws.amazon.com/s3/buckets/[a-zA-Z0-9-\.\_]+)",
+    "Base 64": r"^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$",
     "Facebook Access Token": r"EAACEdEose0cBA[0-9A-Za-z]+",
     "Facebook OAuth": r"[f|F][a|A][c|C][e|E][b|B][o|O][o|O][k|K].*['|\"][0-9a-f]{32}['|\"]",
-    "GitHub": r"[g|G][i|I][t|T][h|H][u|U][b|B].*['|\"][0-9a-zA-Z]{35,40}['|\"]",
-    "github_secrets": r"(GITHUB_SECRET|GITHUB_KEY|github_secret|github_key|github_token|GITHUB_TOKEN|github_api_key|GITHUB_API_KEY)[a-z_=\s\"'\:]{0,10}[^a-zA-Z0-9][a-zA-Z0-9]{40}[^a-zA-Z0-9]",
-    "github": r"(GITHUB_SECRET|GITHUB_KEY|github_secret|github_key|github_token|GITHUB_TOKEN|github_api_key|GITHUB_API_KEY)",
+    "GitHub Personal Access Token (Classic)": r"^ghp_[a-zA-Z0-9]{36}$",
+    "Github Personal Access Token (Fine-Grained)": r"^github_pat_[a-zA-Z0-9]{22}_[a-zA-Z0-9]{59}$",
+    "Github OAuth 2.0": r"^gho_[a-zA-Z0-9]{36}$",
+    "Github User-to-Server Access Token": r"^ghu_[a-zA-Z0-9]{36}$",
+    "Github Server-to-Server Access Token": r"^ghs_[a-zA-Z0-9]{36}$",
+    "Github Refresh Token": r"^ghr_[a-zA-Z0-9]{36}$",
+    "github_secrets": r"(g|G][i|I][t|T][h|H][u|U][b|B].*['|\"][0-9a-zA-Z]{35,40}['|\"]|GITHUB_SECRET|GITHUB_KEY|github_secret|github_key|github_token|GITHUB_TOKEN|github_api_key|GITHUB_API_KEY)[a-z_=\s\"'\:]{0,10}[^a-zA-Z0-9][a-zA-Z0-9]{40}[^a-zA-Z0-9]",   
     "Generic API Key": r"[a|A][p|P][i|I][_]?[k|K][e|E][y|Y].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
     "Generic Secret": r"[s|S][e|E][c|C][r|R][e|E][t|T].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
     "Google API Key": r"AIza[0-9A-Za-z\\-_]{35}",
     "Google Cloud Platform API Key": r"AIza[0-9A-Za-z\\-_]{35}",
     "Google Cloud Platform OAuth": r"[0-9]+-[0-9A-Za-z_]{32}\\.apps\\.googleusercontent\\.com",
+    "Google OAuth 2.0 Secret Key": r"[0-9a-zA-Z-_]{24}",
+    "Google OAuth 2.0 Auth Code": r"4/[0-9A-Za-z-_]+",
+    "Google OAuth 2.0 Access Token": r"ya29.[0-9A-Za-z-_]+",
     "Google Drive API Key": r"AIza[0-9A-Za-z\\-_]{35}",
     "Google Drive OAuth": r"[0-9]+-[0-9A-Za-z_]{32}\\.apps\\.googleusercontent\\.com",
     "Google (GCP) Service-account": '"type": "service_account"',
@@ -47,14 +57,20 @@ regex = {
     "Google OAuth Access Token": r"ya29\\.[0-9A-Za-z\\-_]+",
     "Google YouTube API Key": r"AIza[0-9A-Za-z\\-_]{35}",
     "Google YouTube OAuth": r"[0-9]+-[0-9A-Za-z_]{32}\\.apps\\.googleusercontent\\.com",
+    "Instagram OAuth 2.0": r"[0-9a-fA-F]{7}.[0-9a-fA-F]{32}",
+    "Instagram Username": r"(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:.(?!.))){0,28}(?:[A-Za-z0-9_]))?)"
     "Heroku API Key": r"[h|H][e|E][r|R][o|O][k|K][u|U].*[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}",
     "MailChimp API Key": r"[0-9a-f]{32}-us[0-9]{1,2}",
     "Mailgun API Key": r"key-[0-9a-zA-Z]{32}",
     "Password in URL": r"[a-zA-Z]{3,10}://[^/\\s:@]{3,20}:[^/\\s:@]{3,20}@.{1,100}[\"'\\s]",
     "PayPal Braintree Access Token": r"access_token\\$production\\$[0-9a-z]{16}\\$[0-9a-f]{32}",
-    "Personal Infromation": r"ssn=|dob=|email|ccn|^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$",
+    "Misc Personal Infromation": r"|dob=|ccn|^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$|",
+    "SSN": r"^(\d{3}-?\d{2}-?\d{4}|XXX-XX-XXXX)$| ssn=",
+    "Phone": r"((?:(?<![\d-])(?:\+?\d{1,3}[-.\s*]?)?(?:\(?\d{3}\)?[-.\s*]?)?\d{3}[-.\s*]?\d{4}(?![\d-]))|(?:(?<![\d-])(?:(?:\(\+?\d{2}\))|(?:\+?\d{2}))\s*\d{2}\s*\d{3}\s*\d{4}(?![\d-])))",
+    "BTC Address": r"(?<![a-km-zA-HJ-NP-Z0-9])[13][a-km-zA-HJ-NP-Z0-9]{26,33}(?![a-km-zA-HJ-NP-Z0-9])",
     "Uploads": r"upload-fields",
     "JSON": r"json_file",
+    "Email": r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])",
     "Picatic API Key": r"sk_live_[0-9a-z]{32}",
     "Possible_Creds": r"(?i)("
     r"password\s*[`=:\"]+\s*[^\s]+|"
@@ -62,6 +78,13 @@ regex = {
     r"pwd\s*[`=:\"]*\s*[^\s]+|"
     r"passwd\s*[`=:\"]+\s*[^\s]+)",
     "Credentials": r"(pwd|passwd|credentials|username|password|user|admin|root|administrator)",
+    "IPv4": r"^\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3}$",
+    "IPv6": r"\b([\d\w]{4}|0)(\:([\d\w]{4}|0)){7}\b",
+    "OpenAi User Api Key": r"sk-[A-Za-z0-9]{20}T3BlbkFJ[A-Za-z0-9]{20}",
+    "OpenAi User Project Key": r"sk-proj-[A-Za-z0-9]{20}T3BlbkFJ[A-Za-z0-9]{20}",
+    "OpenAI Service ID": r"^[A-Za-z0-9]+(-*[A-Za-z0-9]+)*$",
+    "Open AI Service Key": r"sk-{SERVICE ID}-[A-Za-z0-9]{20}T3BlbkFJ[A-Za-z0-9]{20}",
+    "File Path": r"	\\[^\\]+$",
     "Slack Webhook": r"https://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}",
     "Stripe API Key": r"sk_live_[0-9a-zA-Z]{24}",
     "Stripe Restricted API Key": r"rk_live_[0-9a-zA-Z]{24}",
@@ -69,6 +92,7 @@ regex = {
     "Square OAuth Secret": r"sq0csp-[0-9A-Za-z\\-_]{43}",
     "Twilio API Key": r"SK[0-9a-fA-F]{32}",
     "Twitter Access Token": r"[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*[1-9][0-9]+-[0-9a-zA-Z]{40}",
+    "Twitter Username": r"/(^|[^@\w])@(\w{1,15})\b/",
     "Twitter OAuth": r"[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*['|\"][0-9a-zA-Z]{35,44}['|\"]",
     "Unknown_api": r"""(?i)(?:aws-keys|api_key=|api=|apisecret|access_key_id=|secret_key=|secret|access_token|refresh_token|privateKey|publicKey|key|token|client|auth|access)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9a-z\-_.=]{10,150})(?:['|\"|\n|\r|\s|\x60|;]|$)""",
 }
