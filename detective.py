@@ -24,7 +24,7 @@ regex = {
     "Amazon MWS Auth Token": r"amzn\\.mws\\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
     "AWS API Key": r"AKIA[0-9A-Z]{16}",
     "AWS Secret Key": r"[0-9a-zA-Z/+]{40}",
-    "Amazon Marketing Services": r"amzn.mws.[0-9a-f]{8}-[0-9a-f]{4}-10-9a-f1{4}-[0-9a,]{4}-[0-9a-f]{12}"
+    "Amazon Marketing Services": r"amzn.mws.[0-9a-f]{8}-[0-9a-f]{4}-10-9a-f1{4}-[0-9a,]{4}-[0-9a-f]{12}",
     "amazon_aws_url2": r"("
     r"[a-zA-Z0-9-\.\_]+\.s3\.amazonaws\.com"
     r"|s3://[a-zA-Z0-9-\.\_]+"
@@ -40,7 +40,7 @@ regex = {
     "Github User-to-Server Access Token": r"^ghu_[a-zA-Z0-9]{36}$",
     "Github Server-to-Server Access Token": r"^ghs_[a-zA-Z0-9]{36}$",
     "Github Refresh Token": r"^ghr_[a-zA-Z0-9]{36}$",
-    "github_secrets": r"(g|G][i|I][t|T][h|H][u|U][b|B].*['|\"][0-9a-zA-Z]{35,40}['|\"]|GITHUB_SECRET|GITHUB_KEY|github_secret|github_key|github_token|GITHUB_TOKEN|github_api_key|GITHUB_API_KEY)[a-z_=\s\"'\:]{0,10}[^a-zA-Z0-9][a-zA-Z0-9]{40}[^a-zA-Z0-9]",   
+    "github_secrets": r"(g|G][i|I][t|T][h|H][u|U][b|B].*['|\"][0-9a-zA-Z]{35,40}['|\"]|GITHUB_SECRET|GITHUB_KEY|github_secret|github_key|github_token|GITHUB_TOKEN|github_api_key|GITHUB_API_KEY)[a-z_=\s\"'\:]{0,10}[^a-zA-Z0-9][a-zA-Z0-9]{40}[^a-zA-Z0-9]",
     "Generic API Key": r"[a|A][p|P][i|I][_]?[k|K][e|E][y|Y].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
     "Generic Secret": r"[s|S][e|E][c|C][r|R][e|E][t|T].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
     "Google API Key": r"AIza[0-9A-Za-z\\-_]{35}",
@@ -58,7 +58,7 @@ regex = {
     "Google YouTube API Key": r"AIza[0-9A-Za-z\\-_]{35}",
     "Google YouTube OAuth": r"[0-9]+-[0-9A-Za-z_]{32}\\.apps\\.googleusercontent\\.com",
     "Instagram OAuth 2.0": r"[0-9a-fA-F]{7}.[0-9a-fA-F]{32}",
-    "Instagram Username": r"(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:.(?!.))){0,28}(?:[A-Za-z0-9_]))?)"
+    "Instagram Username": r"(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:.(?!.))){0,28}(?:[A-Za-z0-9_]))?)",
     "Heroku API Key": r"[h|H][e|E][r|R][o|O][k|K][u|U].*[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}",
     "MailChimp API Key": r"[0-9a-f]{32}-us[0-9]{1,2}",
     "Mailgun API Key": r"key-[0-9a-zA-Z]{32}",
