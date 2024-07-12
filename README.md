@@ -22,7 +22,7 @@ python3 project.py -f path/to/somecode.js -v
 
 This project was made as my final project for Harvard's CS50P course. 
 
-Detective.py is a tool designed to highlight potentially sensitive information in a piece of code. This sensitive information could include credentials, API keys or database information.
+Detective.py is a cybersecurity tool designed to highlight potentially sensitive information in a piece of code. This sensitive information could include credentials, API keys, or database information.
 This search is done by parsing the provided input whether it be a file or URL, and checking each word of this input against this library of regular expressions. One of the challenges
 of accurately checking each word is formatting ugly inputs or blocks of code into standard lines. I leveraged a few popular libraries to check for a few different file types (mainly
 ones commonly found on websites) and beautify them accordingly. This beautification is key to the output as accurate as possible. I aim to provide the exact word that caused
