@@ -123,7 +123,14 @@ def main():
 
     args = parser.parse_args()
 
-    input = get_input(args.file, args.url, args.verbose)
+    test_input(args.file, args.url)
+    if args.file:
+        input = get_input_file(args.file, args.verbose)
+    elif args.url:
+        input = get_input_url(args.url, args.verbose)
+    else:
+        print(f"{colorama.Fore.RED}Please provide either a URL or a file path.")
+        exit(1)
 
     if args.slow:
         slow_search(input, args)
@@ -131,83 +138,97 @@ def main():
         fast_search(input, args)
 
 
-# method to create the text to be parsed (eg make a request or open the file)
-def get_input(file, url, verbose):
-    test_input(file, url)
-    if file is not None and url is None:
-        try:
-            with open(file, "r") as f:
-                file_string = f.read()
-        except FileNotFoundError:
-            print(f"{colorama.Fore.RED}File not found")
-            exit(1)
+def get_input_file(file, verbose):
+    """The function handles returning a strings containing the beautified contents of the input file
+
+    Args:
+        file (_type_): user specified file
+        verbose (_type_): boolean indicating if user wants verbose output
+
+    Returns:
+        _type_: string
+    """
+    try:
+        with open(file, "r") as f:
+            file_string = f.read()
+    except FileNotFoundError:
+        print(f"{colorama.Fore.RED}File not found")
+        exit(1)
+    else:
+        if verbose:
+            print(f"{colorama.Fore.GREEN} File opened successfully!")
+        if file.endswith(".js"):
+            if verbose:
+                print(f"{colorama.Fore.GREEN} Beautifying JavaScript file...")
+            return beautify(file_string)
+        elif file.endswith(".json"):
+            if verbose:
+                print(f"{colorama.Fore.GREEN} Beautifying JSON file...")
+            return json.dumps(file_string, indent=2)
+        elif file.endswith(".html"):
+            if verbose:
+                print(f"{colorama.Fore.GREEN} Beautifying HTML file...")
+            print(file_string)
+            return BeautifulSoup(file_string, "html")
         else:
             if verbose:
-                print(f"{colorama.Fore.GREEN} File opened successfully!")
-            if file.endswith(".js"):
+                print(f"{colorama.Fore.GREEN} Returning file of arbitrary type...")
+            return file_string
+
+
+def get_input_url(url, verbose):
+    """If user has specified a URL, this function will scrape its contents and return a beautified string representation of it
+
+    Args:
+        url (_type_): user specified URL
+        verbose (_type_): boolean indicating if the user specified verbose output
+
+    Returns:
+        _type_: string representation of the URL source code
+    """
+    try:
+        request = requests.get(url)
+    except (
+        requests.exceptions.ConnectionError,
+        requests.exceptions.Timeout,
+    ) as e:
+        print(f"{colorama.Fore.RED}A connection error or timeout occurred: {e}")
+        exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"{colorama.Fore.RED}HTTP Error: {e}")
+        exit(1)
+    except requests.exceptions.RequestException as e:
+        print(f"{colorama.Fore.RED}An error occurred: {e}")
+        exit(1)
+    else:
+        if request.status_code == 200:
+            request = request.text
+            if verbose:
+                print(
+                    f"{colorama.Fore.GREEN} Connection established, parsing response..."
+                )
+            if url.endswith(".js"):
                 if verbose:
-                    print(f"{colorama.Fore.GREEN} Beautifying JavaScript file...")
-                return beautify(file_string)
-            elif file.endswith(".json"):
+                    print(f"{colorama.Fore.GREEN} Beautifying JavaScript...")
+                return beautify(request)
+            elif url.endswith(".json"):
                 if verbose:
-                    print(f"{colorama.Fore.GREEN} Beautifying JSON file...")
-                return json.dumps(file_string, indent=2)
-            elif file.endswith(".html"):
-                if verbose:
-                    print(f"{colorama.Fore.GREEN} Beautifying HTML file...")
-                return BeautifulSoup(file_string, "html")
+                    print(f"{colorama.Fore.GREEN} Beautifying JSON...")
+                return json.dumps(request, indent=2)
+            # assume that the url points to a random website thus we will search the websites html
             else:
                 if verbose:
-                    print(f"{colorama.Fore.GREEN} Returning file of arbitrary type...")
-                return file_string
-    elif url is not None and file is None:
-        try:
-            request = requests.get(url)
-        except (
-            requests.exceptions.ConnectionError,
-            requests.exceptions.Timeout,
-        ) as e:
-            print(f"{colorama.Fore.RED}A connection error or timeout occurred: {e}")
-            exit(1)
-        except requests.exceptions.HTTPError as e:
-            print(f"{colorama.Fore.RED}HTTP Error: {e}")
-            exit(1)
-        except requests.exceptions.RequestException as e:
-            print(f"{colorama.Fore.RED}An error occurred: {e}")
-            exit(1)
-        else:
-
-            if request.status_code == 200:
-                request = request.text
-                if verbose:
                     print(
-                        f"{colorama.Fore.GREEN} Connection established, parsing response..."
+                        f"{colorama.Fore.GREEN} Parsing and beautifying webpage to get HTML..."
                     )
-                if url.endswith(".js"):
-                    if verbose:
-                        print(f"{colorama.Fore.GREEN} Beautifying JavaScript...")
-                    return beautify(request)
-                elif url.endswith(".json"):
-                    if verbose:
-                        print(f"{colorama.Fore.GREEN} Beautifying JSON...")
-                    return json.dumps(request, indent=2)
-                # assume that the url points to a random website thus we will search the websites html
-                else:
-                    if verbose:
-                        print(
-                            f"{colorama.Fore.GREEN} Parsing and beautifying webpage to get HTML..."
-                        )
-                    return BeautifulSoup(request, "html")
+                return BeautifulSoup(request, "html").prettify()
 
 
 def test_input(file, url):
+    """
+    Tests the supplied user inputs before processing
+    """
     if file is not None and url is not None:
-        print(
-            colorama.Fore.RED
-            + "File and URL were both supplied, or neither were specified"
-        )
-        exit(1)
-    elif file is None and url is None:
         print(
             colorama.Fore.RED
             + "File and URL were both supplied, or neither were specified"
@@ -231,6 +252,9 @@ def test_input(file, url):
 
 
 def fast_search(input, args, output_file=None):
+    """
+    Handles the fast search, which is the default. Does not return anything, just prints or writes the results
+    """
 
     if args.output is not None and output_file is None:
         output = get_output_file(args.output)
@@ -298,6 +322,9 @@ def fast_search(input, args, output_file=None):
 
 
 def slow_search(input, args):
+    """
+    Handles the slightly slower but more comprehensive slow search. Does not return anything just prints or writes the results and then calls the fast search function
+    """
     with open("gitleaks.toml", "rb") as f:
         doc = tomli.load(f)
         rule_list = doc["rules"]
@@ -319,9 +346,7 @@ def slow_search(input, args):
             linecount += 1
             for rule in rule_list:
                 words = line.split()
-
                 for word in words:
-
                     # this increases accuracy if large blocks of text are submitted. The word that caused it will be much more accurate and mitigate huge blocks of text in output
                     if len(word) > 200:
                         for indiv in word.split(","):
